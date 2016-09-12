@@ -41,11 +41,25 @@
 
                 </com.turo.turodogclock.TimeView>
 
-                <LinearLayout
+                <com.turo.turodogclock.AlarmView
                     android:id="@+id/tabAlarm"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:orientation="vertical"></LinearLayout>
+                    android:orientation="vertical">
+
+                    <ListView
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:id="@+id/lvAlarmList"
+                        android:layout_weight="1"></ListView>
+
+                    <Button
+                        android:id="@+id/btnAddAlarm"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/addAlarm"/>
+
+                </com.turo.turodogclock.AlarmView>
 
                 <LinearLayout
                     android:id="@+id/tabTimer"
