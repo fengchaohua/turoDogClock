@@ -26,11 +26,20 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
-                <LinearLayout
+                <com.turo.turodogclock.TimeView
                     android:id="@+id/tabTime"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:orientation="vertical"></LinearLayout>
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/tvTime"
+                        android:gravity="center"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:textAppearance="?android:attr/textAppearanceLarge"/>
+
+                </com.turo.turodogclock.TimeView>
 
                 <LinearLayout
                     android:id="@+id/tabAlarm"
