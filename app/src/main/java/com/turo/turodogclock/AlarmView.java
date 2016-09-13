@@ -2,6 +2,7 @@ package com.turo.turodogclock;
 
 import android.app.TimePickerDialog;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -20,6 +21,7 @@ public class AlarmView extends LinearLayout{
     private Button btnAddAlarm;
     private ListView lvAlarmlist;
     private ArrayAdapter<AlarmData> adapter;
+    private static final String KEY_ALARM_LIST = "alarmList";
 
     public AlarmView(Context context) {
         super(context);
@@ -43,6 +45,7 @@ public class AlarmView extends LinearLayout{
 
             adapter = new ArrayAdapter<AlarmView.AlarmData>(getContext(), android.R.layout.simple_list_item_1);
             lvAlarmlist.setAdapter(adapter);
+            readSavedAlarmList();
 
             adapter.add(new AlarmData(System.currentTimeMillis()));
 
@@ -56,7 +59,7 @@ public class AlarmView extends LinearLayout{
         }
 
     private void addAlarm(){
-        //
+
         Calendar c = Calendar.getInstance();
 
 
@@ -80,9 +83,52 @@ public class AlarmView extends LinearLayout{
                     calendar.setTimeInMillis(calendar.getTimeInMillis()+24*60*60*1000);//向后推一天
                 }
                 adapter.add(new AlarmData(calendar.getTimeInMillis()));//添加到ListView中
+                saveAlarmList();
+
             }
         },c.get(Calendar.HOUR_OF_DAY),c.get(Calendar.MINUTE),true).show();
 
+    }
+
+    /**
+     * 保存闹钟
+     */
+    private void saveAlarmList(){
+        SharedPreferences.Editor editor = getContext().getSharedPreferences(AlarmView.class.getName(),Context.MODE_PRIVATE).edit();
+
+        StringBuffer sb = new StringBuffer();
+        for (int i=0; i<adapter.getCount(); i++){
+            sb.append(adapter.getItem(i).getTime()).append(" , ");
+        }
+
+        if (sb.length()>1){
+            String content = sb.toString().substring(0,sb.length()-1);
+
+            editor.putString(KEY_ALARM_LIST, content);
+
+            System.out.println(content);
+        }else{
+            editor.putString(KEY_ALARM_LIST,null);
+        }
+
+        editor.commit();
+    }
+
+
+    /**
+     * 读取闹钟
+     */
+    private void readSavedAlarmList(){
+
+        SharedPreferences sp = getContext().getSharedPreferences(AlarmView.class.getName(), Context.MODE_PRIVATE);
+        String content = sp.getString(KEY_ALARM_LIST, null);
+
+        if (content!=null){
+            String[] timeStrings = content.split(" , ");
+            for (String string : timeStrings){
+                adapter.add(new AlarmData(Long.parseLong(string)));
+            }
+        }
     }
 
     private static class AlarmData{
