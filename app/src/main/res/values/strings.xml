@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">TuroDogClock</string>
     <string name="addAlarm">添加闹钟</string>
+    <string name="play_sound">play_sound</string>
 </resources>

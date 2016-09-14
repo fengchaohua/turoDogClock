@@ -15,6 +15,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <receiver android:name="AlarmReceiver"></receiver>
+        <activity android:name="PlayAlarmAty" android:screenOrientation="portrait"></activity>
     </application>
-
 </manifest>

@@ -1,10 +1,16 @@
 package com.turo.turodogclock;
 
+import android.app.AlarmManager;
+import android.app.AlertDialog;
+import android.app.PendingIntent;
 import android.app.TimePickerDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.util.AttributeSet;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -21,18 +27,26 @@ public class AlarmView extends LinearLayout{
     private Button btnAddAlarm;
     private ListView lvAlarmlist;
     private ArrayAdapter<AlarmData> adapter;
-    private static final String KEY_ALARM_LIST = "alarmList";
+    private AlarmManager alarmManager;
+    private String KEY_ALARM_LIST = "alarmList";
 
     public AlarmView(Context context) {
         super(context);
+        init();
     }
 
     public AlarmView(Context context, AttributeSet attrs) {
         super(context, attrs);
+        init();
     }
 
     public AlarmView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+        init();
+    }
+
+    private void init (){
+        alarmManager = (AlarmManager) getContext().getSystemService(Context.ALARM_SERVICE);
     }
 
 
@@ -47,8 +61,6 @@ public class AlarmView extends LinearLayout{
             lvAlarmlist.setAdapter(adapter);
             readSavedAlarmList();
 
-            adapter.add(new AlarmData(System.currentTimeMillis()));
-
             btnAddAlarm.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -56,7 +68,37 @@ public class AlarmView extends LinearLayout{
                 }
             });
 
+            lvAlarmlist.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+                @Override
+                public boolean onItemLongClick(AdapterView<?> parent, View view,
+                                               final int position, long id) {
+                    new AlertDialog.Builder(getContext()).setTitle("操作选项").setItems(new CharSequence[]{"删除"},new DialogInterface.OnClickListener(){
+
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            switch (which){
+                                case 0:
+                                    deleteAlarm(position);
+                                    break;
+                                default:
+                                    break;
+                            }
+
+                        }
+                    }).setNegativeButton("取消", null).show();
+                    return true;
+                }
+            });
+
         }
+
+    private void deleteAlarm(int position){
+        AlarmData ad = adapter.getItem(position);
+        adapter.remove(ad);
+        saveAlarmList();
+
+        alarmManager.cancel(PendingIntent.getBroadcast(getContext(), ad.getId(), new Intent(getContext(), AlarmReceiver.class), 0));
+    }
 
     private void addAlarm(){
 
@@ -76,13 +118,20 @@ public class AlarmView extends LinearLayout{
                 Calendar calendar = Calendar.getInstance();
                 calendar.set(Calendar.HOUR_OF_DAY,hourOfDay);//设置时间
                 calendar.set(Calendar.MINUTE,minute);//设置分钟
+                calendar.set(Calendar.SECOND,0);
+                calendar.set(Calendar.MILLISECOND,0);
 
                 Calendar currentTime = Calendar.getInstance();//当前时间
 
                 if (calendar.getTimeInMillis()<=currentTime.getTimeInMillis()){
                     calendar.setTimeInMillis(calendar.getTimeInMillis()+24*60*60*1000);//向后推一天
                 }
-                adapter.add(new AlarmData(calendar.getTimeInMillis()));//添加到ListView中
+                AlarmData ad = new AlarmData(calendar.getTimeInMillis());
+                adapter.add(ad);//添加到ListView中
+                alarmManager.setRepeating(AlarmManager.RTC_WAKEUP,
+                        ad.getTime(),
+                        5*60*1000,
+                        PendingIntent.getBroadcast(getContext(),ad.getId(),new Intent(getContext(),AlarmReceiver.class),0));
                 saveAlarmList();
 
             }
@@ -126,7 +175,12 @@ public class AlarmView extends LinearLayout{
         if (content!=null){
             String[] timeStrings = content.split(" , ");
             for (String string : timeStrings){
-                adapter.add(new AlarmData(Long.parseLong(string)));
+                try {
+                    adapter.add(new AlarmData(Long.parseLong(string)));
+
+                }catch(Exception e){
+                    e.printStackTrace();
+                }
             }
         }
     }
@@ -156,6 +210,10 @@ public class AlarmView extends LinearLayout{
 
         public String getTimeLabel(){
             return timeLabel;
+        }
+
+        public int getId(){
+            return (int)(getTime()/1000/60);
         }
 
         @Override
