@@ -61,11 +61,100 @@
 
                 </com.turo.turodogclock.AlarmView>
 
-                <LinearLayout
+                <com.turo.turodogclock.TimerView
                     android:id="@+id/tabTimer"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:orientation="vertical"></LinearLayout>
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
+                        android:orientation="horizontal"
+                        >
+                        <EditText
+                            android:id="@+id/etHour"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:inputType="number"
+                            android:singleLine="true"
+                            android:textAppearance="?android:attr/textAppearanceLarge"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text=":"
+                            android:textAppearance="?android:attr/textAppearanceLarge"/>
+
+                        <EditText
+                            android:id="@+id/etMin"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:inputType="number"
+                            android:singleLine="true"
+                            android:textAppearance="?android:attr/textAppearanceLarge"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text=":"
+                            android:textAppearance="?android:attr/textAppearanceLarge"/>
+
+                        <EditText
+                            android:id="@+id/etSec"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:inputType="number"
+                            android:singleLine="true"
+                            android:textAppearance="?android:attr/textAppearanceLarge"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text=":"
+                            android:textAppearance="?android:attr/textAppearanceLarge"/>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/btnGroup"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <Button
+                            android:id="@+id/btnStart"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="@string/start"/>
+
+                        <Button
+                            android:id="@+id/btnPause"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="@string/pause"/>
+
+                        <Button
+                            android:id="@+id/btnResume"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="@string/resume"/>
+
+                        <Button
+                            android:id="@+id/btnReset"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="@string/reset"/>
+                    </LinearLayout>
+
+                </com.turo.turodogclock.TimerView>
 
                 <LinearLayout
                     android:id="@+id/tabStopWatch"

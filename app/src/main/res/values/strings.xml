@@ -2,4 +2,8 @@
     <string name="app_name">TuroDogClock</string>
     <string name="addAlarm">添加闹钟</string>
     <string name="play_sound">play_sound</string>
+    <string name="start">开始</string>
+    <string name="pause">暂停</string>
+    <string name="resume">停止</string>
+    <string name="reset">复位</string>
 </resources>

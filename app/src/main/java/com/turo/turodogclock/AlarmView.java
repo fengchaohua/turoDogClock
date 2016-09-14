@@ -30,11 +30,23 @@ public class AlarmView extends LinearLayout{
     private AlarmManager alarmManager;
     private String KEY_ALARM_LIST = "alarmList";
 
+
+    /**
+     * 构造方法1
+     * 程序使用
+     * @param context
+     */
     public AlarmView(Context context) {
         super(context);
         init();
     }
 
+    /**
+     * 构造方法2
+     * xml布局资源使用
+     * @param context
+     * @param attrs
+     */
     public AlarmView(Context context, AttributeSet attrs) {
         super(context, attrs);
         init();
@@ -49,9 +61,11 @@ public class AlarmView extends LinearLayout{
         alarmManager = (AlarmManager) getContext().getSystemService(Context.ALARM_SERVICE);
     }
 
-
-        @Override
-        protected void onFinishInflate() {
+    /**
+     * 初始化完成方法
+     */
+    @Override
+    protected void onFinishInflate() {
             super.onFinishInflate();
 
             btnAddAlarm = (Button) findViewById(R.id.btnAddAlarm);
